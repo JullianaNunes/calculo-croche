@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Crochê</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fefefe;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #444;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .resultado {
+      font-weight: bold;
+      font-size: 18px;
+      color: #2a7;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Calculadora de Preço de Crochê</h1>
+
+  <label for="tipo">Tipo de peça:</label>
+  <select id="tipo">
+    <option value="square">Square</option>
+    <option value="regata">Regata</option>
+    <option value="vestido">Vestido</option>
+  </select>
+
+  <div id="medidas-square">
+    <label for="qtdSquares">Quantidade de squares:</label>
+    <input type="number" id="qtdSquares" value="1">
+  </div>
+
+  <div id="medidas-roupa" class="hidden">
+    <label for="busto">Busto (cm):</label>
+    <input type="number" id="busto" value="90">
+    <label for="cintura">Cintura (cm):</label>
+    <input type="number" id="cintura" value="70">
+    <label for="comprimento">Comprimento (cm):</label>
+    <input type="number" id="comprimento" value="50">
+  </div>
+
+  <label for="linha">Linha utilizada:</label>
+  <select id="linha">
+    <option value="anne">Anne (Tex 295, 500m)</option>
+    <option value="duna">Duna (Tex 590, 170m)</option>
+    <option value="bella">Bella Arte (Tex 590, 170m)</option>
+  </select>
+
+  <label for="tempo">Tempo por peça (min):</label>
+  <input type="number" id="tempo" value="16">
+
+  <label for="extras">Custos extras (R$):</label>
+  <input type="number" id="extras" value="0">
+
+  <label for="valorHora">Valor da hora (R$):</label>
+  <input type="number" id="valorHora" value="15">
+
+  <div class="resultado" id="resultado">Preencha os dados acima para calcular.</div>
+
+  <script>
+    const tipo = document.getElementById("tipo");
+    const medidasSquare = document.getElementById("medidas-square");
+    const medidasRoupa = document.getElementById("medidas-roupa");
+    const resultado = document.getElementById("resultado");
+
+    tipo.addEventListener("change", () => {
+      if (tipo.value === "square") {
+        medidasSquare.classList.remove("hidden");
+        medidasRoupa.classList.add("hidden");
+      } else {
+        medidasSquare.classList.add("hidden");
+        medidasRoupa.classList.remove("hidden");
+      }
+      calcular();
+    });
+
+    const inputs = document.querySelectorAll("input, select");
+    inputs.forEach(input => input.addEventListener("input", calcular));
+
+    const linhas = {
+      anne: { tex: 295, metros: 500, preco: 16.90 },
+      duna: { tex: 590, metros: 170, preco: 13.00 },
+      bella: { tex: 590, metros: 170, preco: 14.00 }
+    };
+
+    function calcular() {
+      const tipoPeca = tipo.value;
+      const linha = document.getElementById("linha").value;
+      const tempo = parseFloat(document.getElementById("tempo").value) || 0;
+      const extras = parseFloat(document.getElementById("extras").value) || 0;
+      const valorHora = parseFloat(document.getElementById("valorHora").value) || 15;
+      const dadosLinha = linhas[linha];
+
+      let metrosNecessarios = 0;
+      let tempoTotal = 0;
+
+      if (tipoPeca === "square") {
+        const qtdSquares = parseInt(document.getElementById("qtdSquares").value) || 0;
+        metrosNecessarios = qtdSquares * 40; // estimativa 40m por square
+        tempoTotal = (tempo * qtdSquares) / 60;
+      } else {
+        const busto = parseFloat(document.getElementById("busto").value) || 0;
+        const cintura = parseFloat(document.getElementById("cintura").value) || 0;
+        const comprimento = parseFloat(document.getElementById("comprimento").value) || 0;
+        const area = ((busto + cintura) / 2) * comprimento;
+        metrosNecessarios = area * 0.5; // estimativa 0,5m por cm²
+        tempoTotal = metrosNecessarios / 25; // 25m por hora média
+      }
+
+      const rolosNecessarios = Math.ceil(metrosNecessarios / dadosLinha.metros);
+      const custoMaterial = rolosNecessarios * dadosLinha.preco;
+      const custoTempo = tempoTotal * valorHora;
+      const subtotal = custoMaterial + custoTempo + extras;
+      const lucro = subtotal * 0.3;
+      const precoFinal = subtotal + lucro;
+
+      resultado.innerHTML = `
+        <p><strong>Metragem estimada:</strong> ${metrosNecessarios.toFixed(0)} m</p>
+        <p><strong>Rolos necessários:</strong> ${rolosNecessarios}</p>
+        <p><strong>Custo com linha:</strong> R$ ${custoMaterial.toFixed(2)}</p>
+        <p><strong>Tempo estimado:</strong> ${tempoTotal.toFixed(1)} h</p>
+        <p><strong>Subtotal:</strong> R$ ${subtotal.toFixed(2)}</p>
+        <p><strong>Lucro (30%):</strong> R$ ${lucro.toFixed(2)}</p>
+        <p><strong>Preço final sugerido:</strong> <span style="color:green">R$ ${precoFinal.toFixed(2)}</span></p>
+      `;
+    }
+
+    calcular();
+  </script>
+
+</body>
+</html>
