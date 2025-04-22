@@ -23,7 +23,7 @@ function calcular() {
 
     if (tipo === "square") {
         const qtd = parseInt(document.getElementById("qtdSquare").value);
-        metrosUsados = (500 / 25) * qtd; // Anne faz 25 squares com 500m
+        metrosUsados = (linhas[linhaSel].metragem / 25) * qtd; // Anne faz 25 squares com 500m
     } else {
         const busto = parseFloat(document.getElementById("busto").value);
         const cintura = parseFloat(document.getElementById("cintura").value);
