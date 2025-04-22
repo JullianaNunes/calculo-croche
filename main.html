@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora de Preço de Produto Artesanal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f3f3f3;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #444;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    td, th {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .resultado {
+      font-weight: bold;
+      color: #2a7;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Calculadora de Preço Artesanal</h1>
+
+  <table>
+    <tr>
+      <td>Qtd de peças/squares:</td>
+      <td><input type="number" id="quantidade" value="1"></td>
+    </tr>
+    <tr>
+      <td>Tempo por peça (em minutos):</td>
+      <td><input type="number" id="tempoPorPeca" value="16"></td>
+    </tr>
+    <tr>
+      <td>Custo com material (R$):</td>
+      <td><input type="number" id="material" value="0"></td>
+    </tr>
+    <tr>
+      <td>Extras (R$):</td>
+      <td><input type="number" id="extras" value="0"></td>
+    </tr>
+    <tr>
+      <td>Valor por hora:</td>
+      <td><input type="number" id="valorHora" value="15"></td>
+    </tr>
+    <tr>
+      <td>Subtotal (custo + tempo + extras):</td>
+      <td class="resultado" id="subtotal">R$ 0,00</td>
+    </tr>
+    <tr>
+      <td>Lucro (30%):</td>
+      <td class="resultado" id="lucro">R$ 0,00</td>
+    </tr>
+    <tr>
+      <td>Preço Final:</td>
+      <td class="resultado" id="precoFinal">R$ 0,00</td>
+    </tr>
+  </table>
+
+  <div class="footer">Feito com carinho para suas criações!</div>
+
+  <script>
+    const inputs = document.querySelectorAll("input");
+    inputs.forEach(input => input.addEventListener("input", calcular));
+
+    function calcular() {
+      const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
+      const tempoPorPeca = parseFloat(document.getElementById("tempoPorPeca").value) || 0;
+      const material = parseFloat(document.getElementById("material").value) || 0;
+      const extras = parseFloat(document.getElementById("extras").value) || 0;
+      const valorHora = parseFloat(document.getElementById("valorHora").value) || 0;
+
+      const tempoTotalHoras = (quantidade * tempoPorPeca) / 60;
+      const custoTempo = tempoTotalHoras * valorHora;
+
+      const subtotal = material + custoTempo + extras;
+      const lucro = subtotal * 0.3;
+      const precoFinal = subtotal + lucro;
+
+      document.getElementById("subtotal").textContent = `R$ ${subtotal.toFixed(2)}`;
+      document.getElementById("lucro").textContent = `R$ ${lucro.toFixed(2)}`;
+      document.getElementById("precoFinal").textContent = `R$ ${precoFinal.toFixed(2)}`;
+    }
+
+    calcular();
+  </script>
+
+</body>
+</html>
