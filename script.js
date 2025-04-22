@@ -7,6 +7,7 @@ function atualizarCampos() {
 
 const linhas = {
     anne: { metragem: 500, preco: 16.9 },
+    anneDuplo: { metragem: 1000, preco: 33.8},
     duna: { metragem: 170, preco: 13 },
     bella: { metragem: 170, preco: 14 }
 };
