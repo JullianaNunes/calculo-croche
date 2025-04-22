@@ -38,7 +38,7 @@ function calcular() {
     const custoMateriais = rolos * precoLinha;
     const custoHora = valorHora * horas;
     const subtotal = custoHora + custoMateriais + extras;
-    const precoFinal = subtotal * 1.3;
+    const precoFinal = subtotal * 0.3;
 
     document.getElementById("resultado").innerHTML = `
         <h4>Resultado:</h4>
@@ -46,7 +46,7 @@ function calcular() {
         <p><strong>Custo com linha:</strong> R$ ${custoMateriais.toFixed(2)}</p>
         <p><strong>Custo com hora:</strong> R$ ${custoHora.toFixed(2)}</p>
         <p><strong>Extras:</strong> R$ ${extras.toFixed(2)}</p>
-        <p><strong>Subtotal:</strong> R$ ${subtotal.toFixed(2)}</p>
-        <p><strong>Preço final (30% lucro):</strong> <span class="fw-bold text-success">R$ ${precoFinal.toFixed(2)}</span></p>
+        <p><strong>Subtotal (Valor sem o lucro de 30%):</strong> R$ ${subtotal.toFixed(2)}</p>
+        <p><strong>Preço final com 30% lucro:</strong> <span class="fw-bold text-success">R$ ${precoFinal.toFixed(2)}</span></p>
     `;
 }
